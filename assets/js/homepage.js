@@ -3,18 +3,40 @@ var repoSearchTerm = document.querySelector("#repo-search-term");
 var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 
+var formSubmitHandler = function(event) {
+    // prevent page from refreshing
+    event.preventDefault();
+
+    // get value from input element
+    var username = nameInputEl.value.trim();
+
+    if (username) {
+    getUserRepos(username);
+
+    //clear old content
+    repoContainerEl.textContent = '';
+    nameInputEl.value = '';
+    } else {
+    alert("Please enter a GitHub username");
+}
+};
+
 var getUserRepos = function(user) {
   // format the github api url
   var apiUrl = "https://api.github.com/users/" + user + "/repos";
 
   // make a request to the url
-  fetch(apiUrl).then(function(response) {
+  fetch(apiUrl)
+    .then(function(response) {
+    //response was successful
     if (response.ok) {
-      response.json().then(function(data) {
+        console.log(response);
+        response.json().then(function(data) {
+        console.log(data);
         displayRepos(data, user);
       });
     } else {
-      alert("Error: GitHub User Not Found");
+      alert('Error: ' + response.statusText);
     }
   })
   .catch(function(error) {
@@ -23,31 +45,15 @@ var getUserRepos = function(user) {
   });
 };
 
-var formSubmitHandler = function(event) {
-    event.preventDefault();
-    // get value from input element
-    var username = nameInputEl.value.trim();
-
-    if (username) {
-    getUserRepos(username);
-    nameInputEl.value = "";
-    } else {
-    alert("Please enter a GitHub username");
-}
-};
-
 var displayRepos = function(repos, searchTerm) {
-    console.log(repos);
-    console.log(searchTerm);
-    // clear old content
-    repoContainerEl.textContent = "";
-    repoSearchTerm.textContent = searchTerm;
-
     // check if api returned any repos
     if (repos.length === 0) {
-    repoContainerEl.textContent = "No repositories found.";
-    return;
+        repoContainerEl.textContent = "No repositories found.";
+        return;
     }
+
+    repoSearchTerm.textContent = searchTerm;
+
     // loop over repos
     for (var i = 0; i < repos.length; i++) {
     // format repo name
