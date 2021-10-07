@@ -1,8 +1,6 @@
 var repoNameEl = document.querySelector("#repo-name");
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");
-var repoNameEl = document.querySelector("#repo-name");
-
 
 var getRepoName = function() {
     // get repo name from URL queue string
@@ -20,7 +18,6 @@ var getRepoName = function() {
         document.location.replace("./index.html");
       }
   }
-  
 
 var getRepoIssues = function(repo) {
     // format the github api url
@@ -43,9 +40,8 @@ var getRepoIssues = function(repo) {
             //if unsuccessful please redirect to homepage
           document.location.replace("./index.html");
         }
-      });
-
-  };
+    });
+};
   
 var displayIssues = function(issues) {
     if (issues.length === 0) {
@@ -53,6 +49,7 @@ var displayIssues = function(issues) {
         return;
     }
 
+    // loop over given issues
     for (var i = 0; i < issues.length; i++) {
         // create a link element to take users to the issue on github
         var issueEl = document.createElement("a");
